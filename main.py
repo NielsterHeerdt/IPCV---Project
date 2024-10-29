@@ -3,10 +3,10 @@ import numpy as np
 import os
 
 # function to detect lines
-def detect_lines(frame,boundaries):
+def detect_corners(frame,boundaries):
     intersections = []
 
-    # remove colors of lower values (the lines are white)
+   # remove colors of lower values (the lines are white)
     for (lower, upper) in boundaries:
         lower = np.array(lower, dtype="uint8")
         upper = np.array(upper, dtype="uint8")
@@ -42,7 +42,7 @@ def detect_lines(frame, boundaries):
     gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
 
     # Step 3: Edge detection to get line contours
-    edges = cv2.Canny(gray, 40, 200, apertureSize=3)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
 
     # Step 4: Hough Line Transform to detect lines
     lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi / 180, threshold=100, minLineLength=50, maxLineGap=10)
@@ -57,7 +57,7 @@ def detect_lines(frame, boundaries):
 
 
 # initiate video 
-video_path = 'video.mp4'
+video_path = 'video2.mp4'
 cap = cv2.VideoCapture(video_path)
 fps = cap.get(cv2.CAP_PROP_FPS)
 
@@ -75,7 +75,7 @@ while frame_count < total_frames:
     if not ret:
         break
     # Step 1: corner detection (localize calibration points)
-    frame, intersections = detect_lines(frame,boundaries)
+    frame, intersections = detect_corners(frame,boundaries)
     
     # Step 2 Intrinsic camera calibration using the known 3D positions of reference objects
     output_frame, detected_lines = detect_lines(frame, boundaries)
@@ -88,7 +88,7 @@ while frame_count < total_frames:
     # Step 6 Projection of a virtual banner which has a rectangular shape in the real world and located near a court line
 
     cv2.imshow("Detected Lines", output_frame)
-    #cv2.imshow('frame',frame)
+    cv2.imshow('frame',frame)
 
     cv2.waitKey(25)
     frame_count += 1 
