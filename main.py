@@ -74,11 +74,11 @@ while frame_count < total_frames:
     ret, frame = cap.read()
     if not ret:
         break
-    # Step 1: corner detection (localize calibration points)
+    # Step 1: corner and line detection (localize calibration points)
     frame, intersections = detect_corners(frame,boundaries)
-    
-    # Step 2 Intrinsic camera calibration using the known 3D positions of reference objects
     output_frame, detected_lines = detect_lines(frame, boundaries)
+    # Step 2 Intrinsic camera calibration using the known 3D positions of reference objects
+    
     # Step 3 External camera calibration: the pose of the camera relative to the 3D reference objects
 
     # Step 4 Tracking of 2D points and/or lines in the movie.
