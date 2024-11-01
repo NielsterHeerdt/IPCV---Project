@@ -35,8 +35,6 @@ total_segments = 8
 total_frames = frames_per_segment * total_segments
 boundaries = [([170, 170, 100], [255, 255, 255])]
 
-s = 0
-
 while frame_count < total_frames:
     ret, frame = cap.read()
     if not ret:
